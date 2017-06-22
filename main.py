@@ -1,16 +1,21 @@
 import md5
 import program
-import os
+import subprocess
+
 c=raw_input("enter client file address")
 s=raw_input("enter sever file adress")
+
 client=open(c,'rw+')
 server=open(s,'rw+')
-if program.checksum(client,server):
-    if md5.checkmd5(client,server):
-	pass
+if len(c.read())<(2**30) and len(s.read())<(2**30):
+    if program.checksum(client,server):
+        if md5.checkmd5(client,server):
+	    pass
+        else:
+	    client.write(server.read(1024))
     else:
-	client.write(server.read(1024))
+        subprocess.call(["mv",c,s])
 else:
-   os.system('mv c s')
+    print("large file size")
 
 
